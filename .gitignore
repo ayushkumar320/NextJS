@@ -1,0 +1,7 @@
+.vscode/
+node_modules/
+.env
+**.env
+!.env.example
+.env.local
+.env.development.local
