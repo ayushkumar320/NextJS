@@ -6,5 +6,5 @@ export default function UserProfile({params}: any) {
       <p className="text-3xl">Profile Page</p>
       <span className="p-2 rounded bg-orange-600 ml-2"> {params.id}</span>
     </div>
-  )
+  );
 }
