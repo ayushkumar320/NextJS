@@ -1,21 +1,47 @@
 "use client"; // It make sures that this is a client component
 
 import Link from "next/link";
-import React from "react";
+import React, {useEffect} from "react";
 import {useRouter} from "next/navigation";
-// import {axios} from "axios";
-
+import axios from "axios";
+import toast, { Toaster } from 'react-hot-toast';
 export default function LoginPage() {
+  const router = useRouter();
+  
   const [user, setUser] = React.useState({
     email: "",
     password: "",
   });
 
-  const onLogin = async () => {};
+  const [buttonDisabled, setButtonDisabled] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
+
+  useEffect(() => {
+    if(user.email.length > 0 && user.password.length > 0){
+      setButtonDisabled(false)
+    } else {
+      setButtonDisabled(true)
+    }
+  }, [user])
+
+  const onLogin = async () => {
+    try{
+      setLoading(true);
+      const response = await axios.post("/api/users/login", user);
+      console.log("Login success", response.data)
+      toast.success("Login success");
+      router.push("/profile");
+    } catch (error: any) {
+      console.log("Login failed", error.message);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="bg-gray-700 flex flex-col items-center justify-center p-12 rounded-lg px-24 border-yellow-400 border">
-        <h1 className="text-3xl mb-6">Log In</h1>
+        <h1 className="text-3xl mb-6">{loading ? "Processing": "Log In"}</h1>
         <hr />
         
         <label htmlFor="email">Email</label>
